@@ -53,6 +53,7 @@ class CateApiController extends Controller
         $parent_id = $request->get('parent_id');
         $data = $query->where('parent_id', $parent_id)->pluck('id', 'name');
         return $this->successResponse($data);
+
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SystemCacheKeyEnum;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,23 @@ class Category extends Model
                 'source' => 'name'
             ]
         ];
+    }
+
+    protected static function booted()
+    {
+        static::updated(function ($object) {
+            cache()->forget(SystemCacheKeyEnum::CATEGORIES_PRODUCT);
+        });
+
+
+        static::created(function ($object) {
+            if($object->getAttributes()['parent_id'] === null) {
+                $objectCategories = getCategories();
+                $objectCategories->push($object);
+                cache()->put(SystemCacheKeyEnum::CATEGORIES_PRODUCT, $objectCategories );
+            }
+
+        });
     }
 
     public function children()
