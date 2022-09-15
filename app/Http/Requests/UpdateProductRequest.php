@@ -3,11 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Enums\ProductStatusEnum;
-
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule as ValidationRule;
+use Illuminate\Validation\Rule;
 
-class StoreProductRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,7 +37,6 @@ class StoreProductRequest extends FormRequest
                 'filled',
             ],
             'feature_image' => [
-                'required',
                 'file',
                 'image',
                 'max:500',
@@ -54,7 +52,6 @@ class StoreProductRequest extends FormRequest
 
             ],
             'category_id' => [
-                'required',
             ],
             'description' => [
                 'required',

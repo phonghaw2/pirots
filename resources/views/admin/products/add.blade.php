@@ -68,7 +68,6 @@
                                 <div class="mb-3">
                                     <textarea class="form-control" maxlength="500" rows="3" name="description" id="product-description" placeholder="Description : " width="100%"></textarea>
                                 </div>
-                                <input type="hidden" class="form-control" id="product-status" name="status" value="1">
                                 <button type="submit" class="btn btn-primary">Add product</button>
                             </div>
 
@@ -199,7 +198,33 @@
                 let makeSlug = $(this).val();
                 generateSlug(makeSlug);
         });
+        $('#add-cate-form').submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var actionUrl = form.attr('action');
+            $.ajax({
+                type: "POST",
+                url: actionUrl,
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: "Successfully",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                },
+                error: function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: response.responseJSON.message,
 
+                    });
+                }
+             });
+        });
         $('#slug-cate').change(function () {
 
             $.ajax({

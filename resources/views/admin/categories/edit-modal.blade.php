@@ -12,6 +12,7 @@
                 <div class="card-body">
                     <form action="{{ route('admin.categories.updateCategory') }}" method="post" id="edit-cate-form">
                         @csrf
+                        @method('put')
                             <input type="hidden" name="id" class="form-control" id="id-cate" >
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="name">Name Category</label>

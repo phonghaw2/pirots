@@ -129,6 +129,16 @@
                                         <i class='bx bx-detail'></i>
                                         View
                                     </a>
+                                    <a href="{{ route('admin.products.edit', $each->id) }}" class="btn btn-primary" >
+                                        <i class='bx bxs-edit-alt'></i>
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('admin.products.destroy', $each->id) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-danger">Delete</button>
+                                    </form>
+
                                 </td>
                                 <td>
                                     {{ $each->created_at }}
@@ -284,8 +294,4 @@
 </script>
 @endpush
 
-{{-- // let string = '';
-// string += `{{ asset("img/products/" `;
-// string += response.data.feature_image;
-// string += `) }}` ;
-// $('#product-image').src = string; --}}
+

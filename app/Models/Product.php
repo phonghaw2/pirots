@@ -32,4 +32,11 @@ class Product extends Model
     {
         return ProductStatusEnum::getKey($this->status);
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($object) {
+            $object->status = ProductStatusEnum::IN_STOCK;
+        });
+    }
 }
