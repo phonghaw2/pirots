@@ -48,11 +48,9 @@
                                 <select name="mainCateId" class="form-control">
                                     <option selected></option>
                                         @foreach ($categories as $category)
-                                            @if ($category->parent_id === null)
                                                 <option value="{{ $category->id }}">
                                                     {{ $category->name }}
                                                 </option>
-                                            @endif
                                         @endforeach
                                     </option>
                                 </select>
@@ -92,11 +90,9 @@
                             <select  class="form-control select-mainCateId" >
                                 <option selected></option>
                                     @foreach ($categories as $category)
-                                        @if ($category->parent_id === null)
-                                            <option value="{{ $category->id }}">
-                                                {{ $category->name }}
-                                            </option>
-                                        @endif
+                                        <option value="{{ $category->id }}">
+                                            {{ $category->name }}
+                                        </option>
                                     @endforeach
                                 </option>
                             </select>
