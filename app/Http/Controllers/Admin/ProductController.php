@@ -6,9 +6,11 @@ use App\Enums\ProductStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ResponseTrait;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -53,7 +55,9 @@ class ProductController extends Controller
         };
 
 
-        $data = $query->paginate(10);
+        $data = $query->paginate(10)
+                ->appends($request->all());
+
 
         $status = ProductStatusEnum::asArray();
         $categories = Category::whereNull('parent_id')->get();
@@ -72,6 +76,34 @@ class ProductController extends Controller
         return view('admin.products.add');
     }
 
+
+    public function edit($productId)
+    {
+        $product = $this->model->with('category:id,name')->where('id', $productId)->first();
+        return view('admin.products.edit', compact('product'));
+    }
+
+    public function update(UpdateProductRequest $request,$productId)
+    {
+        try {
+            $arr = $request->validated();
+            if($request->feature_image){
+                $imageName = time() . '.' . $request->feature_image->extension();
+                $request->feature_image->move(public_path('img/products'), $imageName);
+                $arr['feature_image'] = $imageName;
+            }
+
+            $product = Product::find($productId);
+            $product->update($arr);
+            return $this->successResponse();
+
+        } catch (\Throwable $th) {
+
+            return $this->errorResponse($th->getMessage());
+        }
+
+    }
+
     public function store(StoreProductRequest $request)
     {
         try {
@@ -85,5 +117,17 @@ class ProductController extends Controller
         } catch (\Throwable $th) {
             return $this->errorResponse($th->getMessage());
         }
+    }
+
+
+    public function destroy($productId)
+    {
+        $product = Product::find($productId);
+        $image_path = public_path('img/products/'. $product->feature_image);
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        $product->delete();
+        return redirect()->back();
     }
 }
