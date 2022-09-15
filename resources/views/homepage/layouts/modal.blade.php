@@ -5,7 +5,8 @@
             <div class="popup">
                 <div class="popup-left">
                     <div class="form">
-                        <form action="">
+                        <form action="{{ route('register-action') }}" method="post" id="register-form">
+                            @csrf
                             <h2>Create an account!</h2>
                             <span>Please enter your details.</span>
 
@@ -16,29 +17,29 @@
                             </button>
                             </div>
                             <div class="group">
-                                <input type="text" required>
+                                <input type="text" name="name" placeholder="name" required>
                                 <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>Name</label>
+
                             </div>
                             <div class="group">
-                                <input type="text" required>
+                                <input type="email" name="email" placeholder="Email"required>
                                 <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>Email</label>
                             </div>
 
                             <div class="group">
-                                <input type="text" required>
+                                <input type="password"  name="password" placeholder="Password" required>
                                 <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>Password</label>
                             </div>
 
-                            <div class="single">
+                            <div class="group">
+                                <input type="password"  name="password_confirmation"placeholder="Re-type Password" required>
+                                <span class="highlight"></span>
+                            </div>
+
+                            {{-- <div class="single">
                             <input type="checkbox" id="remember-me">
                             <label for="remember-me">Remember for 30 days</label>
-                            </div>
+                            </div> --}}
                             <div class="group">
                             <button >Create account</button>
                             </div>
@@ -63,7 +64,8 @@
             <div class="popup">
                 <div class="popup-left">
                     <div class="form">
-                        <form action="">
+                        <form action="{{ route('login-action') }}" method="post" id="login-form">
+                            @csrf
                             <h2>Welcome!</h2>
                             <span>Please enter your details.</span>
 
@@ -74,23 +76,19 @@
                             </button>
                             </div>
                             <div class="group">
-                            <input type="text" required>
+                            <input type="email" name="email" placeholder="Email" required>
                             <span class="highlight"></span>
-                            <span class="bar"></span>
-                            <label>Email</label>
                             </div>
 
                             <div class="group">
-                            <input type="text" required>
+                            <input type="password" name="password" placeholder="Password" required>
                             <span class="highlight"></span>
-                            <span class="bar"></span>
-                            <label>Password</label>
                             </div>
 
-                            <div class="single">
+                            {{-- <div class="single">
                             <input type="checkbox" id="remember-me">
                             <label for="remember-me">Remember for 30 days</label>
-                            </div>
+                            </div> --}}
                             <div class="group">
                             <button >Log in</button>
                             </div>
@@ -113,3 +111,65 @@
         </div>
     </div>
 </div>
+
+@push('js-front')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.28/dist/sweetalert2.all.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#register-form').submit(function (e) {
+                e.preventDefault();
+                $('.textdanger').remove();
+                var form = $(this);
+                var actionUrl = form.attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Register Successfully!",
+                            text: "Please login!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        setTimeout(function() {
+                            $('.textdanger').remove();
+                            $('.cd-login').addClass('active');
+                            $('.cd-signup').removeClass('active');
+                        }, 1700);
+                    },
+                    error: function (response) {
+                        $.each(response.responseJSON.errors,function(field_name,error){
+                            $(document).find('[name='+field_name+']').after('<span class="text-strong textdanger">' +error+ '</span><br>')
+                        })
+                    }
+                });
+            });
+            $('#login-form').submit(function (e) {
+                e.preventDefault();
+                $('.textdanger').remove();
+                var form = $(this);
+                var actionUrl = form.attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        document.location.reload(true);
+                    },
+                    error: function (response) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.responseJSON.message,
+
+                        });
+                    }
+                });
+            });
+    });
+</script>
+@endpush

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Homepage\HomepageController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,11 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('homepage.homepage');
-});
+// Route::get('/', function () {
+//     return view('homepage.homepage');
+// });
 
 
-Route::get('/', function () {
-    return view('homepage.homepage');
-});
+Route::get('/', [HomepageController::class, 'index'])->name('homepage');
+
+Route::post('/register-action', [UserController::class, 'register_action'])->name('register-action');
+Route::post('/login-action', [UserController::class, 'login_action'])->name('login-action');
+Route::get('/logout', [UserController::class, 'logout'])->name('logout');

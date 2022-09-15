@@ -320,7 +320,7 @@
     height: 50px;
     background-color: #f1c40f;
     margin : auto;
-    font-size: 1.6rem!important;
+    font-size: 1.4rem!important;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -329,3 +329,10 @@
  input[type='file']{
     display: none
  }
+
+.change-category{
+    display: none;
+}
+.change-category.active{
+    display: flex;
+}

@@ -1,8 +1,25 @@
 @media (min-width: 576px) {}
 @media (min-width: 680px) {}
-@media (min-width: 768px) {}
+@media (min-width: 768px) {
+    .homepage-content-area{
+        width: 66.66666667%;
+    }
+}
+@media screen and (max-width: 930px) {
+    .more-menu {
+        justify-content: center;
+    }
+
+}
 @media (min-width: 1020px) {}
 @media (min-width: 1280px) {}
+@media (min-width: 1440px) {
+    .homepage-content-area{
+        min-width: 850px;
+        max-width: 1000px
+    }
+
+}
 @media (min-width: 1600px) {
     .form{
         padding: 50px 200px!important;
